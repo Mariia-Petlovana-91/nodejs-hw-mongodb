@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import pino from "pino-http";
 import { getEvtVar } from "./utils/getEnvVar.js";
+import * as ContactsServises from "./servises/contacts-servise.js";
 
-export const startServer = () => {
+export const setupServer = () => {
 	const app = express();
 
 	app.use(cors());
@@ -14,15 +15,36 @@ export const startServer = () => {
 		}
 	}));
 
-	app.get("/", (req, res) => {
+	app.get("/contacts", async (req, res) => {
+		const data = await ContactsServises.getContacts();
 		res.json({
-			message: "Start work"
+			status: 200,
+			message: "Successfully found contacts!",
+			data,
+		});
+	});
+
+	app.get("/contacts/:contactId", async (req, res) => {
+		const { contactId } = req.params;
+		const data = await ContactsServises.getContactsById(contactId);
+
+		if (!data) {
+			return res.status(404).json({
+				status: 404,
+				message: "Contact not found"
+			});
+		}
+
+		res.json({
+			status: 200,
+			message: `Successfully found contact with id ${contactId}!`,
+			data,
 		});
 	});
 
 	app.use((req, res) => {
 		res.status(404).json({
-			message: `${req.url} not found`
+			message: 'Not found'
 		});
 	});
 

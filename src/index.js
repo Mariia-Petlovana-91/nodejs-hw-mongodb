@@ -1,7 +1,9 @@
-import { startServer } from "./server.js";
+import { setupServer } from "./server.js";
+import { iMondoDB } from "./db/iMongoDB.js";
 
-const bootstrap = () => {
-	startServer();
+const bootstrap = async () => {
+	await iMondoDB();
+	setupServer();
 };
 
 bootstrap();
