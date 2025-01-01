@@ -1,9 +1,9 @@
 import * as ContactsServises from '../servises/contacts-servise.js';
-import { isValidMondoose } from '../utils/isValidMongoose.js';
 import { isDataHandler } from '../utils/isDataHandler.js';
 
 export const getContactsController = async (req, res) => {
   const data = await ContactsServises.getContacts();
+  isDataHandler(data);
   res.json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -12,15 +12,13 @@ export const getContactsController = async (req, res) => {
 };
 
 export const getContactsByIdController = async (req, res) => {
-  const { contactId } = req.params;
-  isValidMondoose(contactId);
-
-  const data = await ContactsServises.getContactsById(contactId);
+  const { id } = req.params;
+  const data = await ContactsServises.getContactsById(id);
   isDataHandler(data);
 
   res.json({
     status: 200,
-    message: `Successfully found contact with id ${contactId}!`,
+    message: `Successfully found contact with id ${id}!`,
     data,
   });
 };
@@ -36,8 +34,6 @@ export const addContactController = async (req, res) => {
 
 export const updateContactController = async (req, res) => {
   const { id } = req.params;
-  isValidMondoose(id);
-
   const data = await ContactsServises.updateContact(id, req.body);
   isDataHandler(data);
 
@@ -50,8 +46,6 @@ export const updateContactController = async (req, res) => {
 
 export const deleteContactController = async (req, res) => {
   const { id } = req.params;
-  isValidMondoose(id);
-
   const data = await ContactsServises.deleteContact({ _id: id });
   isDataHandler(data);
 
