@@ -1,11 +1,57 @@
 import ContactCollections from '../db/models/Contacts.js';
 
-export const getContacts = () => ContactCollections.find();
+import { calcPaginationData } from '../utils/calcPaginationData.js';
+
+export const getContacts = async (
+  page = 1,
+  perPage = 10,
+  sortBy = '_id',
+  sortOrder = 'asc',
+  filter = {},
+) => {
+  const limit = perPage;
+  const skip = (page - 1) * limit;
+
+  const dataQuery = ContactCollections.find();
+
+  if (filter.isFavourite !== undefined) {
+    dataQuery.where('isFavourite').equals(filter.isFavourite);
+    console.log(dataQuery.getQuery());
+  }
+
+  if (filter.contactType) {
+    dataQuery.where('contactType').equals(filter.contactType);
+    console.log(dataQuery.getQuery());
+  }
+
+  const total = await ContactCollections.find()
+    .merge(dataQuery)
+    .countDocuments();
+
+  const data = await dataQuery
+
+    .find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: sortOrder })
+    .exec();
+
+  const paginationData = calcPaginationData(page, perPage, total);
+
+  return {
+    data,
+    ...paginationData,
+  };
+};
+
 export const getContactsById = (id) => ContactCollections.findById(id);
+
 export const addContact = (payload) => ContactCollections.create(payload);
+
 export const updateContact = async (_id, payload) => {
   const result = await ContactCollections.findOneAndUpdate({ _id }, payload);
   return result;
 };
+
 export const deleteContact = (filter) =>
   ContactCollections.findOneAndDelete(filter);
