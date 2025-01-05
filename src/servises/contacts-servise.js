@@ -16,12 +16,10 @@ export const getContacts = async (
 
   if (filter.isFavourite !== undefined) {
     dataQuery.where('isFavourite').equals(filter.isFavourite);
-    console.log(dataQuery.getQuery());
   }
 
   if (filter.contactType) {
     dataQuery.where('contactType').equals(filter.contactType);
-    console.log(dataQuery.getQuery());
   }
 
   const total = await ContactCollections.find()

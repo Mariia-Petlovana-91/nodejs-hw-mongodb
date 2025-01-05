@@ -20,6 +20,6 @@ export const parseContactsFilters = (query) => {
 
   return {
     isFavourite: parseFavorite,
-    parseType: parseType,
+    contactType: parseType,
   };
 };
