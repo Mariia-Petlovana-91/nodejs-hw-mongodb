@@ -54,7 +54,7 @@ export const updateContactController = async (req, res) => {
   const data = await ContactsServises.updateContact(id, req.body);
   isDataHandler(data);
 
-  res.json({
+  res.status(200).json({
     status: 200,
     message: 'Successfully updated the contact!',
     data,
