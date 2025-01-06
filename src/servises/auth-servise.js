@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
+import createHttpError from 'http-errors';
 
 import UserCollections from '../db/models/Users.js';
 import SessionCollections from '../db/models/Session.js';
@@ -9,6 +10,13 @@ import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/auth.js';
+
+const createSessionData = () => ({
+  accessToken: randomBytes(35).toString('base64'),
+  refreshToken: randomBytes(35).toString('base64'),
+  accessTokenValidUntil: Date.now() + accessTokenLifeTime,
+  refreshTokenValidUntil: Date.now() + refreshTokenLifeTime,
+});
 
 export const registerUser = async (payload) => {
   // текст для помилки конфлікту описувати можна вручну таким способом
@@ -41,14 +49,41 @@ export const loginUser = async ({ email, password }) => {
 
   await SessionCollections.deleteOne({ userId: user._id });
 
-  const accessToken = randomBytes(35).toString('base64');
-  const refreshToken = randomBytes(35).toString('base64');
+  const sessionData = createSessionData();
 
   return SessionCollections.create({
     userId: user._id,
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil: Date.now() + accessTokenLifeTime,
-    refreshTokenValidUntil: Date.now() + refreshTokenLifeTime,
+    ...sessionData,
   });
 };
+
+export const refresh = async (payload) => {
+  const oldSession = await SessionCollections.findOne({
+    _id: payload.sessionId,
+    refreshToken: payload.refreshToken,
+  });
+
+  if (!oldSession) {
+    throw createHttpError(401, 'Session not found.');
+  }
+
+  if (Date.now() > oldSession.refreshTokenLifeTime) {
+    throw createHttpError(401, 'Refresh token expired.');
+  }
+
+  await SessionCollections.deleteOne({ _id: payload.sessionId });
+  const sessionData = createSessionData();
+
+  const newSession = await SessionCollections.create({
+    userId: oldSession.userId,
+    ...sessionData,
+  });
+
+  return newSession;
+};
+
+export const logout = async (sessionId) =>
+  await SessionCollections.deleteOne({ _id: sessionId });
+
+export const getUser = (filter) => UserCollections.findOne(filter);
+export const getSession = (filter) => SessionCollections.findOne(filter);
