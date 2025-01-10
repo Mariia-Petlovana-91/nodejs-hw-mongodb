@@ -6,7 +6,13 @@ import {
 } from '../servises/auth-servise.js';
 
 const setupSession = (res, session) => {
+  console.log('SessionId in setupSession:', session.sessionId);
   res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.cookie('sessionId', session._id, {
     httpOnly: true,
     expires: session.refreshTokenValidUntil,
   });

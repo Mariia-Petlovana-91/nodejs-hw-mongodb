@@ -5,7 +5,6 @@ import createHttpError from 'http-errors';
 import UserCollections from '../db/models/Users.js';
 import SessionCollections from '../db/models/Session.js';
 
-import { error401Handler } from '../utils/error401Handler.js';
 import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
@@ -17,6 +16,12 @@ const createSessionData = () => ({
   accessTokenValidUntil: Date.now() + accessTokenLifeTime,
   refreshTokenValidUntil: Date.now() + refreshTokenLifeTime,
 });
+
+const error401Handler = (obj) => {
+  if (!obj) {
+    throw createHttpError(401, 'Email or password invalid');
+  }
+};
 
 export const registerUser = async (payload) => {
   // текст для помилки конфлікту описувати можна вручну таким способом
@@ -50,7 +55,6 @@ export const loginUser = async ({ email, password }) => {
   await SessionCollections.deleteOne({ userId: user._id });
 
   const sessionData = createSessionData();
-
   return SessionCollections.create({
     userId: user._id,
     ...sessionData,
