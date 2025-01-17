@@ -33,7 +33,7 @@ export const getContactsByIdController = async (req, res) => {
   const { id: _id } = req.params;
   const { _id: userId } = req.user;
   const data = await ContactsServises.getContact({ _id, userId });
-  isDataHandler(data);
+  isDataHandler(data, 'Contact');
 
   res.json({
     status: 200,
@@ -56,7 +56,7 @@ export const updateContactController = async (req, res) => {
   const { _id: userId } = req.user;
   const { id: _id } = req.params;
   const data = await ContactsServises.updateContact({ _id, userId }, req.body);
-  isDataHandler(data);
+  isDataHandler(data, 'Contact');
 
   res.status(200).json({
     status: 200,
@@ -69,7 +69,7 @@ export const deleteContactController = async (req, res) => {
   const { _id: userId } = req.user;
   const { id: _id } = req.params;
   const data = await ContactsServises.deleteContact({ _id, userId });
-  isDataHandler(data);
+  isDataHandler(data, 'Contact');
 
   res.status(204).send();
 };

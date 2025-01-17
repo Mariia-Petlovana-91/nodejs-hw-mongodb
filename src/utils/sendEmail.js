@@ -1,40 +1,25 @@
 import nodemailer from 'nodemailer';
-import 'dotenv/config';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
-const { SMTP_KEY, SMTP_USER, SMTP_HOST, SMTP_PORT, SMTP_EMAIL } = process.env;
+const key = getEnvVar('SMTP_KEY');
+const user = getEnvVar('SMTP_USER');
+const host = getEnvVar('SMTP_HOST');
+const port = getEnvVar('SMTP_PORT');
+const from = getEnvVar('SMTP_FROM');
 
 const nodemailerConfig = {
-  host: SMTP_HOST,
-  port: SMTP_PORT,
+  host: host,
+  port: port,
   secure: false,
   auth: {
-    user: SMTP_USER,
-    pass: SMTP_KEY,
+    user: user,
+    pass: key,
   },
 };
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const mailOptions = {
-  from: SMTP_EMAIL,
-  to: 'sanel73355@dfesc.com',
-  subject: 'Password Reset',
-  html: `
-    <p>Hello,</p>
-    <p>You requested to reset your password. Click the link below to reset it:</p>
-    <a href="#">Reset Password</a>
-    <p>If you didn’t request this, please ignore this email.</p>
-  `,
+export const sendEmail = (data) => {
+  const email = { ...data, from: from };
+  return transport.sendMail(email);
 };
-
-const sendEmail = async () => {
-  console.log('hvbwkjvwekvew');
-  try {
-    const info = await transport.sendMail(mailOptions);
-    console.log('Email sent successfully: %s', info.messageId);
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
-};
-
-sendEmail();

@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 
 import contactsRouter from './routers/contacts.js';
 
-import { getEvtVar } from './utils/getEnvVar.js';
+import { getEnvVar } from './utils/getEnvVar.js';
 
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { logger } from './middlewares/logger.js';
@@ -27,7 +27,7 @@ export const setupServer = () => {
 
   app.use(errorHandler);
 
-  const port = Number(getEvtVar('PORT', 3000));
+  const port = Number(getEnvVar('PORT', 3000));
 
   app.listen(port, () => console.log('Server running on 3000 port'));
 };
