@@ -16,7 +16,6 @@ import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/auth.js';
-
 import { passwordTemplatesPath } from '../constants/index.js';
 
 const appDomain = getEnvVar('APP_DOMAIN');

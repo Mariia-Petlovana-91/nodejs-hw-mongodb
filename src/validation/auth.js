@@ -1,5 +1,4 @@
 import Joi from 'joi';
-
 import { regulaкExpressionEmail } from '../constants/auth.js';
 
 export const authRegisterSchema = Joi.object({
