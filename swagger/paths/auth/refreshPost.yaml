@@ -1,0 +1,35 @@
+tags:
+  - Auth
+summary: Refresh access token
+operationId: refreshAccessToken
+description: 'Refresh the access token using a valid refresh token.'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/schemas/refreshRequest.yaml'
+responses:
+  '200':
+    description: 'Access token refreshed successfully'
+    content:
+      application/json:
+        schema:
+          type: object
+          allOf:
+            - $ref: '../../components/responses/successResponse.yaml'
+          properties:
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

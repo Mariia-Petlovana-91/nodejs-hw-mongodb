@@ -1,0 +1,13 @@
+type: object
+properties:
+  token:
+    type: string
+    description: 'Reset password token sent to the user email'
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+  newPassword:
+    type: string
+    format: password
+    example: 'NewPassword123!'
+required:
+  - token
+  - newPassword

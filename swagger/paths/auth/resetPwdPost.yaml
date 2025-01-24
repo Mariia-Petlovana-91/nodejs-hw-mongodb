@@ -1,0 +1,27 @@
+tags:
+  - Auth
+summary: Reset password
+operationId: resetPassword
+description: 'Reset the user password using the provided token and new password.'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/schemas/resetPwdRequest.yaml'
+responses:
+  '200':
+    description: 'Password reset successfully'
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/responses/successResponse.yaml'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
