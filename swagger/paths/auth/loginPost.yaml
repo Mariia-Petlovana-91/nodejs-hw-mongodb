@@ -1,0 +1,34 @@
+tags:
+  - Auth
+summary: Login a user
+operationId: loginUser
+description: 'Authenticate a user and return a JWT token.'
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/schemas/userLogin.yaml'
+responses:
+  '200':
+    description: 'User logged in successfully'
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/responses/successResponse.yaml'
+            - type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    accessToken:
+                      type: string
+                      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
