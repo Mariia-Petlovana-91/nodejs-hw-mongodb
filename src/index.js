@@ -1,9 +1,9 @@
-import { setupServer } from "./server.js";
-import { iMondoDB } from "./db/iMongoDB.js";
+import { setupServer } from './server.js';
+import { iMondoDB } from './db/iMongoDB.js';
 
 const bootstrap = async () => {
-	await iMondoDB();
-	setupServer();
+  await iMondoDB();
+  setupServer();
 };
 
 bootstrap();

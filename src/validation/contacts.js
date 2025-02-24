@@ -1,0 +1,63 @@
+import Joi from 'joi';
+import { contactsType } from '../constants/contacts.js';
+
+export const contactAddSchema = Joi.object({
+  name: Joi.string().min(3).max(20).required().messages({
+    'string.min': 'Invalid(name) number of characters. Minimum is 3.',
+    'string.max': 'Invalid(name) number of characters. Maximum is 20.',
+    'any.required': 'Name is required.',
+  }),
+  phoneNumber: Joi.string().min(3).max(20).required().messages({
+    'string.min': 'Invalid(phoneNumber) number of characters. Minimum is 3.',
+    'string.max': 'Invalid(phoneNumber) number of characters. Maximum is 20.',
+    'any.required': 'Phone number is required.',
+  }),
+  email: Joi.string().email({ minDomainSegments: 2 }).min(3).max(20).messages({
+    'string.email': 'Invalid email format. Example: example.com',
+    'string.min': 'Invalid(email) number of characters. Minimum is 3.',
+    'string.max': 'Invalid(email) number of characters. Maximum is 20.',
+  }),
+  isFavourite: Joi.boolean().required().messages({
+    'any.required': 'The "isFavourite" field is required.',
+  }),
+  contactType: Joi.string()
+    .valid(...contactsType)
+    .required()
+    .messages({
+      'any.only': `Contact type must be one of: ${contactsType.join(', ')}.`,
+      'any.required': 'Contact type is required.',
+    }),
+});
+
+export const contactUpdateSchema = Joi.object({
+  name: Joi.string().min(3).max(20).messages({
+    'string.min': 'Invalid(name) number of characters. Minimum is 3.',
+    'string.max': 'Invalid(name) number of characters. Maximum is 20.',
+    'any.required': 'Name is required.',
+  }),
+  phoneNumber: Joi.string()
+    .regex(/^\+?[0-9]+$/)
+    .min(3)
+    .max(20)
+    .messages({
+      'string.pattern.base':
+        'Phone number must contain only numbers and an optional plus sign (+).',
+      'string.min': 'Invalid(phoneNumber) number of characters. Minimum is 3.',
+      'string.max': 'Invalid(phoneNumber) number of characters. Maximum is 20.',
+      'any.required': 'Phone number is required.',
+    }),
+  email: Joi.string().email({ minDomainSegments: 2 }).min(3).max(20).messages({
+    'string.email': 'Invalid email format. Example: example.com',
+    'string.min': 'Invalid(email) number of characters. Minimum is 3.',
+    'string.max': 'Invalid(email) number of characters. Maximum is 20.',
+  }),
+  isFavourite: Joi.boolean().messages({
+    'any.required': 'The "isFavourite" field is required.',
+  }),
+  contactType: Joi.string()
+    .valid(...contactsType)
+    .messages({
+      'any.only': `Contact type must be one of: ${contactsType.join(', ')}.`,
+      'any.required': 'Contact type is required.',
+    }),
+});

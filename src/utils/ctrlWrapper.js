@@ -5,6 +5,7 @@ export const ctrlWrapper = ctrl => {
 		}
 		catch (error) {
 			next(error);
+			return;
 			// const { status = 500 } = error;
 			// res.status(status).json({
 			// 	status,
