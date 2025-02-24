@@ -62,7 +62,7 @@ export const addContactController = async (req, res) => {
 };
 
 export const updateContactController = async (req, res) => {
-  const { _id: userId } = req.user;
+
   const { id: _id } = req.params;
 
   const existingContact = await ContactsServises.getContact({ _id, userId });
@@ -88,6 +88,10 @@ export const updateContactController = async (req, res) => {
   );
 
   isDataHandler(updatedContact, 'Contact');
+
+
+  isDataHandler(data);
+
 
   res.status(200).json({
     status: 200,
