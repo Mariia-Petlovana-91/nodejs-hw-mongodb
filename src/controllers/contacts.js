@@ -53,9 +53,7 @@ export const addContactController = async (req, res) => {
 };
 
 export const updateContactController = async (req, res) => {
-  const { _id: userId } = req.user;
-  const { id: _id } = req.params;
-  const data = await ContactsServises.updateContact({ _id, userId }, req.body);
+
   isDataHandler(data);
 
   res.status(200).json({

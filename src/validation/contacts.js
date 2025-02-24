@@ -35,15 +35,7 @@ export const contactUpdateSchema = Joi.object({
     'string.max': 'Invalid(name) number of characters. Maximum is 20.',
     'any.required': 'Name is required.',
   }),
-  phoneNumber: Joi.string().min(3).max(20).messages({
-    'string.min': 'Invalid(phoneNumber) number of characters. Minimum is 3.',
-    'string.max': 'Invalid(phoneNumber) number of characters. Maximum is 20.',
-    'any.required': 'Phone number is required.',
-  }),
-  email: Joi.string().email({ minDomainSegments: 2 }).min(3).max(20).messages({
-    'string.email': 'Invalid(email) email format. Example: example.com',
-    'string.min': 'Invalid(email) number of characters. Minimum is 3.',
-    'string.max': 'Invalid number of characters. Maximum is 20.',
+
   }),
   isFavourite: Joi.boolean().messages({
     'any.required': 'The "isFavourite" field is required.',
